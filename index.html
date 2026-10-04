@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#fff1f6">
+
+  <title>С днём рождения! 💗</title>
+
+  <style>
+
+    /* =====================================================
+       СБРОС
+    ===================================================== */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      width: 100%;
+      min-height: 100%;
+
+      background: #fff1f6;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      -webkit-tap-highlight-color: transparent;
+      -webkit-text-size-adjust: 100%;
+
+      scroll-behavior: smooth;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100%;
+
+      margin: 0;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+      color: #443442;
+
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(255, 214, 231, 0.95) 0%,
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 90% 85%,
+          rgba(217, 214, 255, 0.9) 0%,
+          transparent 38%
+        ),
+        linear-gradient(
+          135deg,
+          #fff1f6,
+          #f4f1ff
+        );
+
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      -webkit-overflow-scrolling: touch;
+
+      /*
+        Важно:
+        разрешаем обычную прокрутку пальцем.
+      */
+      touch-action: pan-y;
+
+      -webkit-user-select: none;
+      user-select: none;
+
+      /*
+        Учитываем вырезы iPhone.
+      */
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+
+    /* =====================================================
+       УБИРАЕМ СИНЮЮ ПОДСВЕТКУ
+    ===================================================== */
+
+    *,
+    *::before,
+    *::after {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    .envelope-wrapper {
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus,
+    button:focus-visible,
+    .envelope-wrapper:focus,
+    .envelope-wrapper:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+
+    button {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+
+    /* =====================================================
+       ФОНОВЫЕ СВЕЧЕНИЯ
+    ===================================================== */
+
+    .glow {
+      position: fixed;
+
+      width: 180px;
+      height: 180px;
+
+      border-radius: 50%;
+
+      filter: blur(55px);
+
+      opacity: 0.35;
+
+      pointer-events: none;
+
+      z-index: 0;
+
+      will-change: transform;
+    }
+
+    .glow.one {
+      background: #ff9fc5;
+
+      top: -70px;
+      left: -70px;
+    }
+
+    .glow.two {
+      background: #aaa3ff;
+
+      right: -70px;
+      bottom: -70px;
+    }
+
+
+    /* =====================================================
+       ПЛАВАЮЩИЕ СЕРДЕЧКИ
+    ===================================================== */
+
+    .heart {
+      position: fixed;
+
+      bottom: -40px;
+
+      font-size: 18px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      z-index: 1;
+
+      animation:
+        floatUp linear infinite;
+
+      will-change:
+        transform,
+        opacity;
+    }
+
+    @keyframes floatUp {
+
+      0% {
+        transform:
+          translateY(0)
+          rotate(0deg);
+
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 0.6;
+      }
+
+      80% {
+        opacity: 0.4;
+      }
+
+      100% {
+        transform:
+          translateY(-110vh)
+          rotate(25deg);
+
+        opacity: 0;
+      }
+
+    }
+
+
+    /* =====================================================
+       ЭКРАН КОНВЕРТА
+    ===================================================== */
+
+    .envelope-screen {
+      position: fixed;
+
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+
+      z-index: 100;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        20px
+        20px
+        calc(
+          20px + env(safe-area-inset-bottom)
+        );
+
+      background:
+        radial-gradient(
+          circle at 50% 40%,
+          #fff8fc 0%,
+          transparent 45%
+        ),
+        linear-gradient(
+          135deg,
+          #ffeaf3,
+          #eeeaff
+        );
+
+      transition:
+        opacity 0.7s ease,
+        visibility 0.7s ease;
+
+      /*
+        Не блокируем touch-жесты.
+      */
+      touch-action: auto;
+
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .envelope-screen.hidden {
+      opacity: 0;
+
+      visibility: hidden;
+
+      /*
+        Полностью убираем слой после открытия.
+      */
+      pointer-events: none;
+    }
+
+
+    /* =====================================================
+       ОБЁРТКА КОНВЕРТА
+    ===================================================== */
+
+    .envelope-wrapper {
+      position: relative;
+
+      width: min(84vw, 340px);
+
+      text-align: center;
+
+      cursor: pointer;
+
+      touch-action: manipulation;
+
+      -webkit-user-select: none;
+      user-select: none;
+
+      will-change: transform;
+
+      animation:
+        envelopeAppear
+        0.8s
+        ease
+        forwards;
+    }
+
+    @keyframes envelopeAppear {
+
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(30px)
+          scale(0.88);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateY(0)
+          scale(1);
+      }
+
+    }
+
+
+    /* =====================================================
+       КОНВЕРТ
+    ===================================================== */
+
+    .envelope {
+      position: relative;
+
+      width: 100%;
+
+      aspect-ratio: 1.5 / 1;
+
+      transform-style: preserve-3d;
+
+      -webkit-transform-style: preserve-3d;
+
+      transform:
+        translateZ(0);
+
+      will-change: transform;
+
+      filter:
+        drop-shadow(
+          0 18px 28px
+          rgba(118, 71, 102, 0.2)
+        );
+    }
+
+
+    /* =====================================================
+       ЗАДНЯЯ ЧАСТЬ КОНВЕРТА
+    ===================================================== */
+
+    .envelope-back {
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        linear-gradient(
+          145deg,
+          #f8a9c7,
+          #e889ae
+        );
+
+      border-radius: 12px;
+
+      overflow: hidden;
+
+      z-index: 1;
+    }
+
+    .envelope-back::before {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      bottom: 0;
+
+      width: 50%;
+      height: 100%;
+
+      background: #ee94b7;
+
+      clip-path:
+        polygon(
+          0 0,
+          100% 50%,
+          0 100%
+        );
+    }
+
+    .envelope-back::after {
+      content: "";
+
+      position: absolute;
+
+      right: 0;
+      bottom: 0;
+
+      width: 50%;
+      height: 100%;
+
+      background: #e78aad;
+
+      clip-path:
+        polygon(
+          100% 0,
+          0 50%,
+          100% 100%
+        );
+    }
+
+
+    /* =====================================================
+       ЛИСТ
+    ===================================================== */
+
+    .letter {
+      position: absolute;
+
+      width: 78%;
+      height: 86%;
+
+      left: 11%;
+      bottom: 5%;
+
+      background: #fffafd;
+
+      border-radius: 8px;
+
+      box-shadow:
+        0 4px 12px
+        rgba(120, 70, 100, 0.12);
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      color: #b55d82;
+
+      font-family: Georgia, serif;
+
+      font-size: 27px;
+
+      z-index: 2;
+
+      transform:
+        translateZ(0);
+
+      will-change: transform;
+
+      transition:
+        transform 0.9s
+        cubic-bezier(
+          .2,
+          .8,
+          .2,
+          1
+        );
+    }
+
+    .letter::before {
+      content: "♡";
+
+      font-size: 42px;
+
+      animation:
+        miniHeart
+        1.6s
+        ease-in-out
+        infinite;
+    }
+
+    @keyframes miniHeart {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.12);
+      }
+
+    }
+
+
+    /* =====================================================
+       КЛАПАН
+    ===================================================== */
+
+    .envelope-flap {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 62%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffc1d9,
+          #f09abb
+        );
+
+      clip-path:
+        polygon(
+          0 0,
+          100% 0,
+          50% 100%
+        );
+
+      transform-origin:
+        top center;
+
+      transform:
+        rotateX(0deg)
+        translateZ(0);
+
+      transition:
+        transform
+        0.9s
+        cubic-bezier(
+          .2,
+          .8,
+          .2,
+          1
+        );
+
+      z-index: 5;
+
+      backface-visibility: hidden;
+
+      -webkit-backface-visibility: hidden;
+
+      will-change: transform;
+    }
+
+
+    /* =====================================================
+       СЕРДЦЕ
+    ===================================================== */
+
+    .envelope-heart {
+      position: absolute;
+
+      left: 50%;
+      top: 48%;
+
+      z-index: 10;
+
+      transform:
+        translate(-50%, -50%)
+        translateZ(0);
+
+      font-size: 38px;
+
+      color: white;
+
+      text-shadow:
+        0 4px 12px
+        rgba(165, 65, 105, 0.2);
+
+      transition:
+        opacity 0.3s ease,
+        transform 0.5s ease;
+
+      will-change:
+        opacity,
+        transform;
+    }
+
+
+    /* =====================================================
+       ТЕКСТ ПОД КОНВЕРТОМ
+    ===================================================== */
+
+    .envelope-text {
+      margin-top: 22px;
+
+      text-align: center;
+
+      color: #7b4865;
+
+      animation:
+        textFloat
+        2s
+        ease-in-out
+        infinite;
+    }
+
+    .envelope-text strong {
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-family: Georgia, serif;
+
+      font-size: 24px;
+
+      font-weight: 500;
+    }
+
+    .envelope-text span {
+      font-size: 12px;
+
+      letter-spacing: 1.5px;
+
+      color: #a36c88;
+    }
+
+    @keyframes textFloat {
+
+      0%,
+      100% {
+        transform:
+          translateY(0);
+      }
+
+      50% {
+        transform:
+          translateY(-4px);
+      }
+
+    }
+
+
+    /* =====================================================
+       ОТКРЫТИЕ КОНВЕРТА
+    ===================================================== */
+
+    .envelope-wrapper.opened
+    .envelope-flap {
+
+      transform:
+        rotateX(180deg)
+        translateZ(0);
+    }
+
+    .envelope-wrapper.opened
+    .letter {
+
+      transform:
+        translateY(-75%)
+        translateZ(0);
+    }
+
+    .envelope-wrapper.opened
+    .envelope-heart {
+
+      opacity: 0;
+
+      transform:
+        translate(-50%, -50%)
+        scale(0.3);
+    }
+
+    .envelope-wrapper.opened {
+
+      animation:
+        envelopeShake
+        0.5s
+        ease;
+    }
+
+    @keyframes envelopeShake {
+
+      0% {
+        transform:
+          translateX(0);
+      }
+
+      25% {
+        transform:
+          translateX(-3px)
+          rotate(-0.5deg);
+      }
+
+      50% {
+        transform:
+          translateX(3px)
+          rotate(0.5deg);
+      }
+
+      75% {
+        transform:
+          translateX(-2px);
+      }
+
+      100% {
+        transform:
+          translateX(0);
+      }
+
+    }
+
+
+    /* =====================================================
+       КОНФЕТТИ
+    ===================================================== */
+
+    .confetti {
+      position: fixed;
+
+      width: 7px;
+      height: 11px;
+
+      top: 45%;
+      left: 50%;
+
+      opacity: 0;
+
+      z-index: 200;
+
+      pointer-events: none;
+
+      will-change:
+        transform,
+        opacity;
+    }
+
+    .confetti.fly {
+
+      animation:
+        confettiFly
+        1.7s
+        cubic-bezier(
+          .15,
+          .75,
+          .25,
+          1
+        )
+        forwards;
+    }
+
+    @keyframes confettiFly {
+
+      0% {
+
+        opacity: 1;
+
+        transform:
+          translate(-50%, -50%)
+          translate(0, 0)
+          scale(0.4);
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      100% {
+
+        opacity: 0;
+
+        transform:
+          translate(-50%, -50%)
+          translate(var(--x), var(--y))
+          rotate(var(--rotate))
+          scale(1);
+      }
+
+    }
+
+
+    /* =====================================================
+       ОСНОВНАЯ ОТКРЫТКА
+    ===================================================== */
+
+    .card {
+      position: relative;
+
+      z-index: 2;
+
+      width:
+        calc(100% - 24px);
+
+      max-width: 680px;
+
+      /*
+        Внизу оставляем место для iPhone
+        и для нормальной прокрутки.
+      */
+      margin:
+        20px auto
+        calc(
+          50px +
+          env(safe-area-inset-bottom)
+        );
+
+      padding:
+        40px 22px
+        calc(
+          40px +
+          env(safe-area-inset-bottom)
+        );
+
+      text-align: center;
+
+      background:
+        rgba(
+          255,
+          250,
+          253,
+          0.95
+        );
+
+      border:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          0.9
+        );
+
+      border-radius: 28px;
+
+      box-shadow:
+        0 20px 45px
+        rgba(
+          117,
+          75,
+          105,
+          0.14
+        );
+
+      opacity: 0;
+
+      transform:
+        translateY(25px)
+        scale(0.98);
+
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s
+        cubic-bezier(
+          .2,
+          .8,
+          .2,
+          1
+        );
+    }
+
+    .card.show {
+
+      opacity: 1;
+
+      transform:
+        translateY(0)
+        scale(1);
+    }
+
+
+    /* =====================================================
+       СЕРДЦЕ
+    ===================================================== */
+
+    .small-heart {
+
+      font-size: 28px;
+
+      margin-bottom: 16px;
+
+      animation:
+        heartbeat
+        1.8s
+        ease-in-out
+        infinite;
+    }
+
+    @keyframes heartbeat {
+
+      0%,
+      100% {
+        transform:
+          scale(1);
+      }
+
+      50% {
+        transform:
+          scale(1.15);
+      }
+
+    }
+
+
+    /* =====================================================
+       ПОДЗАГОЛОВОК
+    ===================================================== */
+
+    .subtitle {
+
+      font-size: 11px;
+
+      letter-spacing: 2.5px;
+
+      text-transform: uppercase;
+
+      color: #a36c88;
+
+      margin-bottom: 14px;
+    }
+
+
+    /* =====================================================
+       ЗАГОЛОВОК
+    ===================================================== */
+
+    h1 {
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(
+          36px,
+          11vw,
+          52px
+        );
+
+      line-height: 1.05;
+
+      color: #7b4865;
+
+      margin-bottom: 23px;
+
+      font-weight: 500;
+    }
+
+    .name {
+      color: #d36b96;
+    }
+
+
+    /* =====================================================
+       РАЗДЕЛИТЕЛЬ
+    ===================================================== */
+
+    .divider {
+
+      width: 70px;
+      height: 2px;
+
+      margin:
+        0 auto 25px;
+
+      background:
+        linear-gradient(
+          to right,
+          transparent,
+          #d98cab,
+          transparent
+        );
+    }
+
+
+    /* =====================================================
+       ТЕКСТ
+    ===================================================== */
+
+    .message {
+
+      font-size: 16px;
+
+      line-height: 1.75;
+
+      color: #594956;
+
+      max-width: 540px;
+
+      margin: 0 auto;
+    }
+
+    .message strong {
+
+      color: #b85f86;
+
+      font-weight: 600;
+    }
+
+
+    /* =====================================================
+       ПОДПИСЬ
+    ===================================================== */
+
+    .signature {
+
+      margin-top: 28px;
+
+      font-family:
+        Georgia,
+        serif;
+
+      font-size: 18px;
+
+      font-style: italic;
+
+      color: #80556d;
+
+      line-height: 1.5;
+    }
+
+
+    /* =====================================================
+       КНОПКА
+    ===================================================== */
+
+    .button {
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      margin-top: 28px;
+
+      border: none;
+
+      min-height: 50px;
+
+      min-width: 180px;
+
+      padding:
+        14px 24px;
+
+      border-radius: 50px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e58aad,
+          #c978a0
+        );
+
+      color: white;
+
+      font-family: inherit;
+
+      font-size: 14px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 20px
+        rgba(
+          201,
+          120,
+          160,
+          0.28
+        );
+
+      -webkit-tap-highlight-color:
+        transparent;
+
+      touch-action:
+        manipulation;
+
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .button:active {
+
+      transform:
+        scale(0.96);
+    }
+
+
+    /* =====================================================
+       СЕКРЕТ
+    ===================================================== */
+
+    .secret {
+
+      max-height: 0;
+
+      overflow: hidden;
+
+      opacity: 0;
+
+      margin-top: 0;
+
+      transition:
+        max-height 0.6s ease,
+        opacity 0.5s ease,
+        margin-top 0.5s ease;
+    }
+
+    .secret.show {
+
+      max-height: 300px;
+
+      opacity: 1;
+
+      margin-top: 23px;
+    }
+
+    .secret p {
+
+      font-family:
+        Georgia,
+        serif;
+
+      font-size: 17px;
+
+      color: #8d5772;
+
+      line-height: 1.6;
+    }
+
+
+    /* =====================================================
+       ДЕКОРАЦИИ
+    ===================================================== */
+
+    .decoration {
+
+      position: absolute;
+
+      font-size: 22px;
+
+      opacity: 0.55;
+
+      pointer-events: none;
+    }
+
+    .decoration.top-left {
+
+      top: 18px;
+      left: 16px;
+
+      transform:
+        rotate(-20deg);
+    }
+
+    .decoration.top-right {
+
+      top: 18px;
+      right: 16px;
+
+      transform:
+        rotate(20deg);
+    }
+
+    .decoration.bottom-left {
+
+      bottom: 18px;
+      left: 16px;
+
+      transform:
+        rotate(20deg);
+    }
+
+    .decoration.bottom-right {
+
+      bottom: 18px;
+      right: 16px;
+
+      transform:
+        rotate(-20deg);
+    }
+
+
+    /* =====================================================
+       ОЧЕНЬ МАЛЕНЬКИЙ ТЕЛЕФОН
+    ===================================================== */
+
+    @media (max-width: 360px) {
+
+      .envelope-wrapper {
+        width: 82vw;
+      }
+
+      .card {
+
+        width:
+          calc(100% - 18px);
+
+        padding:
+          34px 17px
+          calc(
+            34px +
+            env(safe-area-inset-bottom)
+          );
+      }
+
+      h1 {
+        font-size: 35px;
+      }
+
+      .message {
+
+        font-size: 15px;
+
+        line-height: 1.7;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+    }
+
+
+    /* =====================================================
+       НИЗКИЙ ТЕЛЕФОН
+    ===================================================== */
+
+    @media (max-height: 650px) {
+
+      .envelope-wrapper {
+        width: 72vw;
+      }
+
+      .envelope-text {
+        margin-top: 12px;
+      }
+
+      .envelope-text strong {
+        font-size: 21px;
+      }
+
+      .envelope-text span {
+        font-size: 11px;
+      }
+
+    }
+
+
+    /* =====================================================
+       ОЧЕНЬ НИЗКИЙ ТЕЛЕФОН
+    ===================================================== */
+
+    @media (max-height: 560px) {
+
+      .envelope-wrapper {
+        width: 65vw;
+      }
+
+      .envelope-text {
+        margin-top: 8px;
+      }
+
+      .envelope-text strong {
+        font-size: 19px;
+      }
+
+      .envelope-text span {
+        font-size: 10px;
+      }
+
+    }
+
+
+    /* =====================================================
+       ОТКЛЮЧЕННЫЕ АНИМАЦИИ
+    ===================================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+
+        animation-duration:
+          0.01ms !important;
+
+        animation-iteration-count:
+          1 !important;
+
+        transition-duration:
+          0.01ms !important;
+
+        scroll-behavior:
+          auto !important;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+  <!-- =====================================================
+       ФОН
+  ===================================================== -->
+
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+
+
+  <!-- =====================================================
+       ПЛАВАЮЩИЕ СЕРДЕЧКИ
+  ===================================================== -->
+
+  <div
+    class="heart"
+    style="
+      left: 8%;
+      animation-duration: 10s;
+      animation-delay: 1s;
+    "
+  >
+    ♡
+  </div>
+
+  <div
+    class="heart"
+    style="
+      left: 25%;
+      animation-duration: 13s;
+      animation-delay: 4s;
+    "
+  >
+    ♥
+  </div>
+
+  <div
+    class="heart"
+    style="
+      left: 45%;
+      animation-duration: 11s;
+      animation-delay: 2s;
+    "
+  >
+    ♡
+  </div>
+
+  <div
+    class="heart"
+    style="
+      left: 68%;
+      animation-duration: 14s;
+      animation-delay: 5s;
+    "
+  >
+    ♥
+  </div>
+
+  <div
+    class="heart"
+    style="
+      left: 88%;
+      animation-duration: 10s;
+      animation-delay: 3s;
+    "
+  >
+    ♡
+  </div>
+
+
+  <!-- =====================================================
+       ЭКРАН КОНВЕРТА
+  ===================================================== -->
+
+  <div
+    class="envelope-screen"
+    id="envelopeScreen"
+  >
+
+    <div
+      class="envelope-wrapper"
+      id="envelopeWrapper"
+      role="button"
+      tabindex="0"
+      aria-label="Открыть конверт"
+    >
+
+      <div class="envelope">
+
+        <div class="letter"></div>
+
+        <div class="envelope-back"></div>
+
+        <div class="envelope-flap"></div>
+
+        <div class="envelope-heart">
+          ♥
+        </div>
+
+      </div>
+
+
+      <div class="envelope-text">
+
+        <strong>
+          Для тебя 💗
+        </strong>
+
+        <span>
+          Нажми, чтобы открыть
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ОТКРЫТКА
+  ===================================================== -->
+
+  <main
+    class="card"
+    id="card"
+  >
+
+    <div class="decoration top-left">
+      ✿
+    </div>
+
+    <div class="decoration top-right">
+      ♡
+    </div>
+
+    <div class="decoration bottom-left">
+      ♡
+    </div>
+
+    <div class="decoration bottom-right">
+      ✿
+    </div>
+
+
+    <div class="small-heart">
+      ♡
+    </div>
+
+
+    <div class="subtitle">
+      Сегодня особенный день
+    </div>
+
+
+    <h1>
+
+      С днём<br>
+
+      рождения,
+
+      <span class="name">
+        Эля
+      </span>!
+
+    </h1>
+
+
+    <div class="divider"></div>
+
+
+    <p class="message">
+
+      Я хочу искренне поздравить тебя
+      с днём рождения! 🎂
+
+      <br><br>
+
+      Я очень
+      <strong>
+        рад, что мы познакомились
+      </strong>.
+
+      Иногда люди появляются в нашей жизни
+      совершенно неожиданно, но оставляют
+      после себя очень тёплые впечатления.
+
+      И я рад, что среди таких людей есть ты.
+
+      <br><br>
+
+      Желаю тебе побольше счастливых моментов,
+      искренних улыбок, приятных сюрпризов
+      и людей, рядом с которыми можно быть собой. ✨
+
+      <br><br>
+
+      Пусть этот новый год твоей жизни
+      принесёт тебе много красивых воспоминаний,
+      интересных событий и исполнения
+      самых заветных желаний.
+
+      <br><br>
+
+      И я очень надеюсь, что
+      <strong>
+        наше общение будет продолжаться
+      </strong>,
+
+      впереди нас ждёт ещё много приятных разговоров, улыбок и хороших моментов.И я хочу сказать тебе кое-что от себя. Ты мне действительно очень нравишься. Мне нравится проводить с тобой время, общаться с тобой и узнавать тебя всё больше.
+
+    </p>
+
+
+    <div class="signature">
+
+      С самыми тёплыми
+      пожеланиями 💗
+
+    </div>
+
+
+    <button
+      class="button"
+      id="secretButton"
+      type="button"
+    >
+      Нажми сюда ✨
+    </button>
+
+
+    <div
+      class="secret"
+      id="secret"
+    >
+
+      <p>
+
+        Я давно хотел сказать,
+	что хотел бы быть с тобой не просто друзьями,
+	а попробовать построить отношения. ❤️
+
+        <br>
+
+        Не знаю, как ты к этому отнесёшься,
+	но мне хотелось быть с тобой честным.
+	Ты для меня особенная, и я очень хочу, 
+	чтобы в моей жизни тебя стало ещё больше. 🥰
+
+      </p>
+
+    </div>
+
+  </main>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ===================================================== -->
+
+  <script>
+
+    /* =====================================================
+       ЭЛЕМЕНТЫ
+    ===================================================== */
+
+    const envelopeWrapper =
+      document.getElementById(
+        "envelopeWrapper"
+      );
+
+    const envelopeScreen =
+      document.getElementById(
+        "envelopeScreen"
+      );
+
+    const card =
+      document.getElementById(
+        "card"
+      );
+
+    const secret =
+      document.getElementById(
+        "secret"
+      );
+
+    const secretButton =
+      document.getElementById(
+        "secretButton"
+      );
+
+
+    let envelopeOpened = false;
+
+
+    /* =====================================================
+       ОТКРЫТИЕ КОНВЕРТА
+    ===================================================== */
+
+    function openEnvelope() {
+
+      /*
+        Не даём открыть повторно.
+      */
+
+      if (envelopeOpened) {
+        return;
+      }
+
+      envelopeOpened = true;
+
+
+      /*
+        Открываем конверт.
+      */
+
+      envelopeWrapper.classList.add(
+        "opened"
+      );
+
+
+      /*
+        Конфетти.
+      */
+
+      createConfetti();
+
+
+      /*
+        Показываем открытку.
+      */
+
+      setTimeout(
+        function () {
+
+          card.classList.add(
+            "show"
+          );
+
+        },
+        450
+      );
+
+
+      /*
+        Полностью убираем
+        экран конверта.
+      */
+
+      setTimeout(
+        function () {
+
+          envelopeScreen.classList.add(
+            "hidden"
+          );
+
+
+          /*
+            Принудительно возвращаем
+            прокрутку документа.
+          */
+
+          document.documentElement.style.overflowY =
+            "auto";
+
+          document.body.style.overflowY =
+            "auto";
+
+
+          /*
+            После появления открытки
+            можно автоматически
+            поставить её начало
+            в верхнюю часть экрана.
+          */
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+
+        },
+        1100
+      );
+
+    }
+
+
+    /*
+      Обычный тап.
+    */
+
+    envelopeWrapper.addEventListener(
+      "click",
+      openEnvelope
+    );
+
+
+    /*
+      Поддержка клавиатуры,
+      если вдруг сайт откроют
+      не только на телефоне.
+    */
+
+    envelopeWrapper.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+
+          event.preventDefault();
+
+          openEnvelope();
+
+        }
+
+      }
+    );
+
+
+/* =====================================================
+   КОНФЕТТИ
+===================================================== */
+
+function createConfetti() {
+
+  const colors = [
+
+    "#e58aad",
+    "#c978a0",
+    "#ffb6d2",
+    "#aaa3ff",
+    "#ffd166",
+    "#ffffff",
+    "#f78fb3"
+
+  ];
+
+
+  const pieces = 42;
+
+
+  for (
+    let i = 0;
+    i < pieces;
+    i++
+  ) {
+
+    const confetti =
+      document.createElement(
+        "div"
+      );
+
+
+    confetti.className =
+      "confetti";
+
+
+    /*
+      Размер конфетти
+    */
+
+    confetti.style.width =
+      (
+        5 +
+        Math.random() * 5
+      ) + "px";
+
+    confetti.style.height =
+      (
+        7 +
+        Math.random() * 8
+      ) + "px";
+
+
+    /*
+      Случайный цвет
+    */
+
+    confetti.style.background =
+      colors[
+        Math.floor(
+          Math.random() *
+          colors.length
+        )
+      ];
+
+
+    /*
+      Направление полёта
+    */
+
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+    const distance =
+      140 +
+      Math.random() * 260;
+
+    const x =
+      Math.cos(angle) *
+      distance;
+
+    const y =
+      Math.sin(angle) *
+      distance;
+
+
+    confetti.style.setProperty(
+      "--x",
+      x + "px"
+    );
+
+    confetti.style.setProperty(
+      "--y",
+      y + "px"
+    );
+
+    confetti.style.setProperty(
+      "--rotate",
+      (
+        Math.random() *
+        720 -
+        360
+      ) + "deg"
+    );
+
+
+    /*
+      Небольшая случайная задержка
+    */
+
+    confetti.style.animationDelay =
+      (
+        Math.random() *
+        0.2
+      ) + "s";
+
+
+    /*
+      Иногда делаем конфетти круглым
+    */
+
+    if (
+      Math.random() < 0.25
+    ) {
+
+      confetti.style.borderRadius =
+        "50%";
+
+    }
+
+
+    /*
+      Добавляем элемент на страницу
+    */
+
+    document.body.appendChild(
+      confetti
+    );
+
+
+    /*
+      Запускаем CSS-анимацию
+    */
+
+    requestAnimationFrame(
+      function () {
+
+        confetti.classList.add(
+          "fly"
+        );
+
+      }
+    );
+
+
+    /*
+      Удаляем после окончания
+      анимации
+    */
+
+    setTimeout(
+      function () {
+
+        confetti.remove();
+
+      },
+      2200
+    );
+
+  }
+
+
+  /*
+    Дополнительные праздничные сердечки
+  */
+
+  createCelebrationHearts();
+
+}
+
+
+/* =====================================================
+   ПРАЗДНИЧНЫЕ СЕРДЕЧКИ
+===================================================== */
+
+function createCelebrationHearts() {
+
+  const hearts = [
+
+    "💗",
+    "💕",
+    "💖",
+    "♡",
+    "♥",
+    "✨"
+
+  ];
+
+
+  /*
+    Количество сердечек
+  */
+
+  const count = 8;
+
+
+  for (
+    let i = 0;
+    i < count;
+    i++
+  ) {
+
+    const heart =
+      document.createElement(
+        "div"
+      );
+
+
+    heart.style.position =
+      "fixed";
+
+    heart.style.left =
+      "50%";
+
+    heart.style.top =
+      "45%";
+
+    heart.style.zIndex =
+      "201";
+
+    heart.style.pointerEvents =
+      "none";
+
+
+    /*
+      Случайный размер
+    */
+
+    heart.style.fontSize =
+      (
+        17 +
+        Math.random() * 14
+      ) + "px";
+
+
+    /*
+      Случайное сердечко
+    */
+
+    heart.textContent =
+      hearts[
+        Math.floor(
+          Math.random() *
+          hearts.length
+        )
+      ];
+
+
+    /*
+      Направление полёта
+    */
+
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+    const distance =
+      120 +
+      Math.random() * 210;
+
+    const x =
+      Math.cos(angle) *
+      distance;
+
+    const y =
+      Math.sin(angle) *
+      distance;
+
+
+    /*
+      Web Animations API
+    */
+
+    heart.animate(
+
+      [
+
+        {
+          transform:
+            "translate(-50%, -50%) scale(0.2)",
+
+          opacity: 0
+        },
+
+        {
+
+          transform:
+            "translate(-50%, -50%) scale(1)",
+
+          opacity: 1,
+
+          offset: 0.2
+
+        },
+
+        {
+
+          transform:
+            `translate(
+              calc(-50% + ${x}px),
+              calc(-50% + ${y}px)
+            )
+            rotate(
+              ${Math.random() * 360}deg
+            )
+            scale(0.9)`,
+
+          opacity: 0
+
+        }
+
+      ],
+
+      {
+
+        duration:
+          1200 +
+          Math.random() * 500,
+
+        delay:
+          Math.random() * 150,
+
+        easing:
+          "cubic-bezier(.2,.8,.2,1)",
+
+        fill:
+          "forwards"
+
+      }
+
+    );
+
+
+    /*
+      Добавляем сердечко
+    */
+
+    document.body.appendChild(
+      heart
+    );
+
+
+    /*
+      Удаляем после анимации
+    */
+
+    setTimeout(
+      function () {
+
+        heart.remove();
+
+      },
+      2200
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   СЕКРЕТНОЕ СООБЩЕНИЕ
+===================================================== */
+
+secretButton.addEventListener(
+  "click",
+  function () {
+
+    secret.classList.toggle(
+      "show"
+    );
+
+
+    /*
+      Если секрет открыт
+    */
+
+    if (
+      secret.classList.contains(
+        "show"
+      )
+    ) {
+
+      secretButton.textContent =
+        "Ещё немного тепла 💕";
+
+
+      /*
+        Небольшая задержка нужна,
+        чтобы браузер успел раскрыть
+        блок .secret.
+      */
+
+      setTimeout(
+        function () {
+
+          secret.scrollIntoView({
+
+            behavior:
+              "smooth",
+
+            block:
+              "center"
+
+          });
+
+        },
+        150
+      );
+
+    }
+
+
+    /*
+      Если секрет закрыли
+    */
+
+    else {
+
+      secretButton.textContent =
+        "Нажми сюда ✨";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   НОВЫЕ ПЛАВАЮЩИЕ СЕРДЕЧКИ
+===================================================== */
+
+function createHeart() {
+
+  /*
+    Пока конверт закрыт,
+    новые сердечки не создаём.
+  */
+
+  if (!envelopeOpened) {
+    return;
+  }
+
+
+  const heart =
+    document.createElement(
+      "div"
+    );
+
+
+  heart.className =
+    "heart";
+
+
+  /*
+    Случайный символ
+  */
+
+  heart.textContent =
+    Math.random() > 0.5
+      ? "♡"
+      : "♥";
+
+
+  /*
+    Случайная позиция
+  */
+
+  heart.style.left =
+    Math.random() * 100 +
+    "%";
+
+
+  /*
+    Случайный размер
+  */
+
+  heart.style.fontSize =
+    (
+      14 +
+      Math.random() * 12
+    ) + "px";
+
+
+  /*
+    Случайная скорость
+  */
+
+  heart.style.animationDuration =
+    (
+      10 +
+      Math.random() * 6
+    ) + "s";
+
+
+  /*
+    Добавляем на страницу
+  */
+
+  document.body.appendChild(
+    heart
+  );
+
+
+  /*
+    Удаляем старое сердечко
+  */
+
+  setTimeout(
+    function () {
+
+      heart.remove();
+
+    },
+    17000
+  );
+
+}
+
+
+/*
+  Создаём новое сердечко
+  каждые 3 секунды.
+*/
+
+setInterval(
+  createHeart,
+  3000
+);
+
+
+/* =====================================================
+   КОНЕЦ JAVASCRIPT
+===================================================== */
+</script>
+
+</body>
+</html>
